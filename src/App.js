@@ -1,6 +1,7 @@
 import React from 'react';
 import ToDoForm from './components/TodoComponents/TodoForm.js';
 import ToDoList from './components/TodoComponents/TodoList.js';
+import './components/TodoComponents/Todo.css';
 
 class App extends React.Component {
   // you will need a place to store your state in this component.
@@ -45,18 +46,34 @@ class App extends React.Component {
     }));
   };
 
-  infoOnItem = (event) => {
-    console.log(this.state)
+  checkOffTodo = (id) => {
+    const toggledList = this.state.sampleArray.map(task => {
+      if( task.id === id ) {
+        task.completed = !task.completed;
+      }
+      return task;
+    });
+
+    this.setState({sampleArray: toggledList});
   };
+
+
+  clearCompleted = (event) => {
+    const unfinishedList = this.state.sampleArray.filter(task => {
+    return !task.completed;
+    });
+    
+    this.setState({sampleArray: unfinishedList});
+  }
 
   render() {
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
         <ToDoForm eventHandler={this.updateTask} />
-        <ToDoList list={this.state.sampleArray} />
+        <ToDoList eventHandler={this.checkOffTodo} list={this.state.sampleArray} />
         <button onClick={this.addToList}>Add!</button>
-        <button onClick={this.infoOnItem}>Info!</button>
+        <button onClick={this.clearCompleted}>Clear completed!</button>
       </div>
     );
   }
